@@ -1,12 +1,13 @@
 package ejercicios;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -14,8 +15,8 @@ import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleGraph;
 
-import tipos.Trabajos;
 import tipos.Investigador;
+import tipos.Trabajos;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
 import us.lsi.common.Map2;
@@ -54,8 +55,8 @@ public class Ejercicio1 {
 		}
 		syso = syso.substring(0, syso.length()-2);
 		syso += "]";
-		System.out.println("b) Los 5 investigadores que tienen un mayor "
-				+ "número de investigadores colaboradores son: "
+		System.out.println("b) Los 5 Investigador que tienen un mayor "
+				+ "número de Investigador colaboradores son: "
 				+ syso);
 		GraphColors.toDot(g1,
 				"grafos/grafo1B.dot",
@@ -69,7 +70,7 @@ public class Ejercicio1 {
 		Par ej1d = Ejercicio1.apartadoD(g1);
 		ShortestPathAlgorithm<Investigador,Trabajos> cam = new DijkstraShortestPath<Investigador,Trabajos>(g1);
 		GraphPath<Investigador,Trabajos> gp =  cam.getPath(ej1d.v1(),ej1d.v2());
-		System.out.println("d) El par de investigadores más lejanos es: " + "(inv-" + Ejercicio1.apartadoD(g1).v1().getID() + ", inv-" + Ejercicio1.apartadoD(g1).v2().getID() + ")");
+		System.out.println("d) El par de Investigador más lejanos es: " + "(inv-" + Ejercicio1.apartadoD(g1).v1().getID() + ", inv-" + Ejercicio1.apartadoD(g1).v2().getID() + ")");
 		GraphColors.toDot(g1,
 				"grafos/grafo1D.dot",
 				v->"Investigador " + String.valueOf(v.getID()),
@@ -91,19 +92,32 @@ public class Ejercicio1 {
 	}
 
 	//Apartado B
-	public static Set<Investigador> apartadoB(Graph<Investigador, Trabajos> grafaso){
-		Set<Investigador> res = Set2.empty();
-		Map<Investigador, Integer> dic = Map2.empty();
-		for(Investigador a:grafaso.vertexSet()) {
-			dic.put(a, grafaso.outDegreeOf(a));
+	public static Set<Investigador> apartadoB(Graph<Investigador, Trabajos> grafo) {
+		Map<Investigador, Integer> map = new HashMap<Investigador, Integer>();
+		for(Investigador inv : grafo.vertexSet()) {
+			map.put(inv, grafo.edgesOf(inv).size());
 		}
-		dic = sortByValue(dic);
-		List<Investigador> aux = dic.keySet().stream().toList();
+		List<Entry<Investigador, Integer>> res = new ArrayList<>(map.entrySet());
+		res.sort(Entry.comparingByValue(Comparator.reverseOrder()));
+		Set<Investigador> conj = Set2.empty();
 		for (int i = 0; i < 5; i++) {
-			res.add(aux.get(i));
+			conj.add(res.get(i).getKey());
 		}
-		return res;
+		return conj;
 	}
+//	public static Set<Investigador> apartadoB(Graph<Investigador, Trabajos> grafaso){
+//		Set<Investigador> res = Set2.empty();
+//		Map<Investigador, Integer> dic = Map2.empty();
+//		for(Investigador a:grafaso.vertexSet()) {
+//			dic.put(a, grafaso.outDegreeOf(a));
+//		}
+//		dic = sortByValue(dic);
+//		List<Investigador> aux = dic.keySet().stream().toList();
+//		for (int i = 0; i < 5; i++) {
+//			res.add(aux.get(i));
+//		}
+//		return res;
+//	}
 	
 	//Apartado C
 	public static Map<Investigador, List<Investigador>> apartadoC(Graph<Investigador, Trabajos> grafaso){
@@ -133,17 +147,17 @@ public class Ejercicio1 {
 		return res;
 	}
 	
-	public static Map<Investigador, Integer> sortByValue(Map<Investigador, Integer> map) {
-	    return map.entrySet()
-	              .stream()
-	              .sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-	              .collect(Collectors.toMap(
-	                Map.Entry::getKey, 
-	                Map.Entry::getValue, 
-	                (e1, e2) -> e1, 
-	                LinkedHashMap::new
-	              ));
-	}
+//	public static Map<Investigador, Integer> sortByValue(Map<Investigador, Integer> mapaso) {
+//	    return mapaso.entrySet()
+//	              .stream()
+//	              .sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
+//	              .collect(Collectors.toMap(
+//	                Map.Entry::getKey, 
+//	                Map.Entry::getValue, 
+//	                (e1, e2) -> e1, 
+//	                LinkedHashMap::new
+//	              ));
+//	}
 	
 	public static Integer apartadoE(Graph<Investigador, Trabajos> grafaso) {
 		return 0;
