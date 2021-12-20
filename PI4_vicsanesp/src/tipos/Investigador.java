@@ -79,8 +79,11 @@ public class Investigador {
 	}
 
 	@Override
+//	public String toString() {
+//		return "Investigador de la universidad: " + this.universidad + ", del anyo: " + this.anyo + ", con la id: " + id;
+//	}
 	public String toString() {
-		return "Investigador de la universidad: " + this.universidad + ", del anyo: " + this.anyo + ", con la id: " + id;
+		return "Investigador con la id: " + id;
 	}
 
 	

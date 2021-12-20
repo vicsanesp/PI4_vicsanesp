@@ -19,6 +19,7 @@ import tipos.Investigador;
 import tipos.Trabajos;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
+import us.lsi.common.List2;
 import us.lsi.common.Map2;
 import us.lsi.common.Set2;
 import us.lsi.graphs.Graphs2;
@@ -65,7 +66,8 @@ public class Ejercicio1 {
 				v->GraphColors.colorIf(Color.blue, Color.green, ej1B.contains(v)),
 				a->GraphColors.color(Color.green)
 				);
-		
+		//Apartado C
+		apartadoC(g1);
 		//Apartado D
 		Par ej1d = Ejercicio1.apartadoD(g1);
 		ShortestPathAlgorithm<Investigador,Trabajos> cam = new DijkstraShortestPath<Investigador,Trabajos>(g1);
@@ -122,9 +124,19 @@ public class Ejercicio1 {
 	//Apartado C
 	public static Map<Investigador, List<Investigador>> apartadoC(Graph<Investigador, Trabajos> grafaso){
 		Map<Investigador, List<Investigador>> res = Map2.empty();
-//		for(Investigador inv:grafaso.vertexSet()) {
-//			
-//		}
+		for(Investigador inv:grafaso.vertexSet()) {
+			List<Investigador> aux = List2.empty();
+			for(Trabajos tra:grafaso.edgesOf(inv)) {
+				if(!tra.getSource().equals(inv)) {
+					aux.add(tra.getSource());
+				}
+				else {
+					aux.add(tra.getTarget());
+				}
+			}
+			res.put(inv, aux);
+		}
+		System.out.println(res);
 		return res;
 	}
 	
