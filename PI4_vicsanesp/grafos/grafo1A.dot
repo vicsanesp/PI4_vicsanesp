@@ -1,0 +1,23 @@
+strict graph G {
+  1 [ color="blue" label="Investigador 1 Año 1981" ];
+  2 [ color="blue" label="Investigador 2 Año 1972" ];
+  3 [ label="Investigador 3 Año 1983" ];
+  4 [ color="blue" label="Investigador 4 Año 1987" ];
+  5 [ label="Investigador 5 Año 1982" ];
+  6 [ color="blue" label="Investigador 6 Año 1970" ];
+  7 [ color="blue" label="Investigador 7 Año 1985" ];
+  8 [ color="blue" label="Investigador 8 Año 1990" ];
+  9 [ color="blue" label="Investigador 9 Año 1974" ];
+  1 -- 6 [ label="3.0" ];
+  1 -- 2 [ color="blue" label="5.0" ];
+  1 -- 4 [ color="blue" label="7.0" ];
+  4 -- 7 [ color="blue" label="6.0" ];
+  4 -- 5 [ label="3.0" ];
+  4 -- 6 [ color="blue" label="5.0" ];
+  5 -- 8 [ label="4.0" ];
+  6 -- 9 [ label="3.0" ];
+  6 -- 7 [ color="blue" label="6.0" ];
+  7 -- 8 [ color="blue" label="6.0" ];
+  7 -- 9 [ label="2.0" ];
+  2 -- 3 [ label="1.0" ];
+}

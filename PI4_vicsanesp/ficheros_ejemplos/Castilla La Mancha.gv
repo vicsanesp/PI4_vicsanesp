@@ -1,0 +1,18 @@
+strict graph G {
+  1 [ label="Toledo" ];
+  2 [ label="CiudadReal" ];
+  3 [ label="Albacete" ];
+  4 [ label="Cuenca" ];
+  5 [ label="Guadalajara" ];
+  6 [ label="Pueblito1" ];
+  7 [ label="Pueblito2" ];
+  8 [ label="Pueblito3" ];
+  9 [ label="Pueblito4" ];
+  10 [ label="Pueblito5" ];
+  1 -- 2 [ label="N-401--121.75" ];
+  1 -- 4 [ label="N-403--182.5" ];
+  2 -- 3 [ label="CM-4127--198.111" ];
+  2 -- 4 [ label="CM-4127--267.342" ];
+  3 -- 4 [ label="N-301--161.784" ];
+  4 -- 5 [ label="N-320--135.213" ];
+}

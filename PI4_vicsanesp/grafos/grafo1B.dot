@@ -1,0 +1,23 @@
+strict graph G {
+  1 [ color="blue" label="Investigador 1" ];
+  2 [ color="green" label="Investigador 2" ];
+  3 [ color="green" label="Investigador 3" ];
+  4 [ color="blue" label="Investigador 4" ];
+  5 [ color="green" label="Investigador 5" ];
+  6 [ color="blue" label="Investigador 6" ];
+  7 [ color="blue" label="Investigador 7" ];
+  8 [ color="blue" label="Investigador 8" ];
+  9 [ color="green" label="Investigador 9" ];
+  1 -- 6 [ color="green" label="3.0" ];
+  1 -- 2 [ color="green" label="5.0" ];
+  1 -- 4 [ color="green" label="7.0" ];
+  4 -- 7 [ color="green" label="6.0" ];
+  4 -- 5 [ color="green" label="3.0" ];
+  4 -- 6 [ color="green" label="5.0" ];
+  5 -- 8 [ color="green" label="4.0" ];
+  6 -- 9 [ color="green" label="3.0" ];
+  6 -- 7 [ color="green" label="6.0" ];
+  7 -- 8 [ color="green" label="6.0" ];
+  7 -- 9 [ color="green" label="2.0" ];
+  2 -- 3 [ color="green" label="1.0" ];
+}

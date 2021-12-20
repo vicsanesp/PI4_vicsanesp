@@ -1,0 +1,256 @@
+awa de owo ñam ñam
+
+amigo
+
+
+package tipos;
+
+public class Amigo {
+	
+	public static Amigo of() {
+		return new Amigo();
+	}
+	
+	public static Amigo ofVertex(Persona p1, Persona p2) {
+		return new Amigo(p1, p2);
+	}
+	
+	public Persona getP1() {
+		return p1;
+	}
+	
+	public Persona getP2() {
+		return p2;
+	}
+	
+	public static Amigo ofFormat(Persona p1, Persona p2, String[] formato) {
+		return new Amigo(p1,p2,formato);
+	}
+	
+	public static Amigo reverse(Amigo p) {
+		return new Amigo(p.p2, p.p1);
+	}
+	
+	private Persona p1;
+	private Persona p2;
+	
+	private Amigo() {
+		this.p1 = null;
+		this.p2 = null;
+	}
+
+	private Amigo(Persona p1, Persona p2) {
+		this.p1 = p1;
+		this.p2 = p2;
+	}
+	
+	private Amigo(Persona p1, Persona p2, String[] formato) {
+		this.p1 = p1;
+		this.p2 = p2;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((p1 == null) ? 0 : p1.hashCode());
+		result = prime * result + ((p2 == null) ? 0 : p2.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Amigo other = (Amigo) obj;
+		if (p1 == null) {
+			if (other.p1 != null)
+				return false;
+		} else if (!p1.equals(other.p1))
+			return false;
+		if (p2 == null) {
+			if (other.p2 != null)
+				return false;
+		} else if (!p2.equals(other.p2))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Amistad [p1=" + p1 + ", p2=" + p2 + "]";
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+persona
+
+
+package tipos;
+
+public class Persona {
+	
+	public static Persona of() {
+		return new Persona("");
+	}
+	
+	public static Persona ofName(String nombre) {
+		return new Persona(nombre);
+	}
+	
+	public static Persona ofFormat(String[] formato) {
+		return new Persona(formato);
+	}
+	
+	String nombre;
+	
+	private Persona(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	private Persona(String[] formato) {
+		super();
+		this.nombre = formato[0];
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Persona other = (Persona) obj;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return this.nombre;
+	}
+	
+	
+
+}
+
+
+
+
+
+
+
+
+
+
+simplevertex
+
+
+package tipos;
+
+public class SimpleVertex {
+	
+	public static SimpleVertex of() {
+		return new SimpleVertex("");
+	}
+	
+	public static SimpleVertex ofName(String nombre) {
+		return new SimpleVertex(nombre);
+	}
+	public static SimpleVertex ofFormat(String[] formato) {
+		return new SimpleVertex(formato);
+	}
+	
+	String nombre;
+	
+	private SimpleVertex(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	private SimpleVertex(String[] formato) {
+		super();
+		this.nombre = formato[0];
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SimpleVertex other = (SimpleVertex) obj;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return this.nombre;
+	}
+	
+	
+
+}
