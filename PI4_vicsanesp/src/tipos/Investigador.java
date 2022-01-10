@@ -83,7 +83,7 @@ public class Investigador {
 //		return "Investigador de la universidad: " + this.universidad + ", del anyo: " + this.anyo + ", con la id: " + id;
 //	}
 	public String toString() {
-		return "Investigador con la id: " + id;
+		return "Inv-" + id;
 	}
 
 	

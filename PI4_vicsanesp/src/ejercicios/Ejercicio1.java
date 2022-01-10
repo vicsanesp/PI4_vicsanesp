@@ -8,19 +8,22 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
+import org.jgrapht.Graphs;
+import org.jgrapht.alg.color.GreedyColoring;
 import org.jgrapht.alg.interfaces.ShortestPathAlgorithm;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
 import tipos.Investigador;
 import tipos.Trabajos;
 import us.lsi.colors.GraphColors;
 import us.lsi.colors.GraphColors.Color;
-import us.lsi.common.List2;
-import us.lsi.common.Map2;
+import us.lsi.colors.GraphColors.Style;
 import us.lsi.common.Set2;
 import us.lsi.graphs.Graphs2;
 import us.lsi.graphs.GraphsReader;
@@ -36,6 +39,13 @@ public class Ejercicio1 {
 				Trabajos::ofFormat,
 				Graphs2::simpleWeightedGraph,
 				Trabajos::getCantidad
+				);
+		SimpleGraph<Investigador, Trabajos> g1D = GraphsReader.newGraph(
+				"ficheros/PI4E1_DatosEntrada.txt",
+				Investigador::ofFormat,
+				Trabajos::ofFormat,
+				Graphs2::simpleWeightedGraph,
+				null
 				);
 		
 		//Apartado A	
@@ -67,20 +77,45 @@ public class Ejercicio1 {
 				a->GraphColors.color(Color.green)
 				);
 		//Apartado C
-		apartadoC(g1);
+		System.out.println("c)");
+		Map<Investigador, List<Investigador>> dic1C = apartadoC(g1);
+		for(Investigador inv: dic1C.keySet()) {
+			System.out.println("inv-" + inv.getID() + "->" + dic1C.get(inv));
+		}
+		GraphColors.toDot(g1, "grafos/grafo1C.dot", 
+				v->"Investigador " + String.valueOf(v.getID()), 
+				a->String.valueOf(a.getCantidad()),
+				v -> GraphColors.color(Color.black),
+				e -> GraphColors.colorIf(Color.blue, Color.black, listaMasTrabajos(dic1C, g1).contains(e)));
+		
 		//Apartado D
-		Par ej1d = Ejercicio1.apartadoD(g1);
-		ShortestPathAlgorithm<Investigador,Trabajos> cam = new DijkstraShortestPath<Investigador,Trabajos>(g1);
+		Par ej1d = Ejercicio1.apartadoD(g1D);
+		ShortestPathAlgorithm<Investigador,Trabajos> cam = new DijkstraShortestPath<Investigador,Trabajos>(g1D);
 		GraphPath<Investigador,Trabajos> gp =  cam.getPath(ej1d.v1(),ej1d.v2());
-		System.out.println("d) El par de Investigador más lejanos es: " + "(inv-" + Ejercicio1.apartadoD(g1).v1().getID() + ", inv-" + Ejercicio1.apartadoD(g1).v2().getID() + ")");
-		GraphColors.toDot(g1,
+		System.out.println("d) El par de Investigador más lejanos es: " + "(inv-" + Ejercicio1.apartadoD(g1D).v1().getID() + ", inv-" + Ejercicio1.apartadoD(g1D).v2().getID() + ")");
+		GraphColors.toDot(g1D,
 				"grafos/grafo1D.dot",
 				v->"Investigador " + String.valueOf(v.getID()),
-				a->String.valueOf(a.getCantidad()),
+				a->"1",
 				v->GraphColors.colorIf(Color.blue, Color.black, gp.getVertexList().contains(v)),
 				a->GraphColors.colorIf(Color.blue, gp.getEdgeList().contains(a))
 				);
 		
+		//Apartado E
+		var alg1 = new GreedyColoring<>(g1);
+		var coloring = alg1.getColoring();
+		Map<Investigador, Integer> map = coloring.getColors();
+		
+		GraphColors.toDot(g1, "grafos/grafo1E.dot", 
+				v->"Investigador " + String.valueOf(v.getID()) + " de " + v.getuniversidad(), 
+				a->String.valueOf(a.getCantidad()),
+				v -> GraphColors.color(map.get(v)), 
+				a -> GraphColors.style(Style.solid));
+		
+		System.out.println("e) Las reuniones serían:");
+		for (Set<Investigador> cjto: apartadoE(g1)) {
+			System.out.println(cjto);	
+		}
 	}
 	
 	
@@ -107,37 +142,37 @@ public class Ejercicio1 {
 		}
 		return conj;
 	}
-//	public static Set<Investigador> apartadoB(Graph<Investigador, Trabajos> grafaso){
-//		Set<Investigador> res = Set2.empty();
-//		Map<Investigador, Integer> dic = Map2.empty();
-//		for(Investigador a:grafaso.vertexSet()) {
-//			dic.put(a, grafaso.outDegreeOf(a));
-//		}
-//		dic = sortByValue(dic);
-//		List<Investigador> aux = dic.keySet().stream().toList();
-//		for (int i = 0; i < 5; i++) {
-//			res.add(aux.get(i));
-//		}
-//		return res;
-//	}
 	
 	//Apartado C
-	public static Map<Investigador, List<Investigador>> apartadoC(Graph<Investigador, Trabajos> grafaso){
-		Map<Investigador, List<Investigador>> res = Map2.empty();
-		for(Investigador inv:grafaso.vertexSet()) {
-			List<Investigador> aux = List2.empty();
-			for(Trabajos tra:grafaso.edgesOf(inv)) {
-				if(!tra.getSource().equals(inv)) {
-					aux.add(tra.getSource());
-				}
-				else {
-					aux.add(tra.getTarget());
-				}
-			}
-			res.put(inv, aux);
+	private static List<Investigador> listaInvestigadores(Investigador i, Graph<Investigador, Trabajos> grafaso) {
+		return grafaso.edgesOf(i).stream()
+				.sorted(Comparator.comparing(Trabajos::getCantidad).reversed())
+				.map(a -> a.getTarget2(i))
+				.collect(Collectors.toList());	
+	}
+	
+	private static List<Trabajos> listaMasTrabajos(Map<Investigador, List<Investigador>> mp, Graph<Investigador, Trabajos> grafaso){
+		
+		List<Trabajos> res = new ArrayList<>();
+		for(Entry<Investigador, List<Investigador>> investigador:mp.entrySet()) {
+			
+			Investigador i = investigador.getValue().get(0);
+			Investigador trueI = grafaso.vertexSet().stream().filter(v -> v.getID().equals(i.getID())).findFirst().get();
+			res.add(grafaso.getEdge(trueI, investigador.getKey()));
+			
 		}
-		System.out.println(res);
 		return res;
+	}
+	
+	public static Map<Investigador, List<Investigador>> apartadoC(Graph<Investigador, Trabajos> grafaso){
+		Map<Investigador, List<Investigador>> mp = new HashMap<>();
+		Set<Investigador> cjtoInv = grafaso.vertexSet();
+		for (Investigador i: cjtoInv) {
+			Investigador key = i;
+			if (!mp.containsKey(key))
+				mp.put(key, listaInvestigadores(i, grafaso));
+		}
+		return mp;
 	}
 	
 	//Apartado D
@@ -159,20 +194,23 @@ public class Ejercicio1 {
 		return res;
 	}
 	
-//	public static Map<Investigador, Integer> sortByValue(Map<Investigador, Integer> mapaso) {
-//	    return mapaso.entrySet()
-//	              .stream()
-//	              .sorted(Map.Entry.comparingByValue(Collections.reverseOrder()))
-//	              .collect(Collectors.toMap(
-//	                Map.Entry::getKey, 
-//	                Map.Entry::getValue, 
-//	                (e1, e2) -> e1, 
-//	                LinkedHashMap::new
-//	              ));
-//	}
-	
-	public static Integer apartadoE(Graph<Investigador, Trabajos> grafaso) {
-		return 0;
+	//Apartado E
+	public static List<Set<Investigador>> apartadoE(Graph<Investigador, Trabajos> grafaso) {
+		Graph<Investigador, Trabajos> copia = new SimpleWeightedGraph<Investigador, Trabajos>(null, null);
+		Graphs.addGraph(copia, grafaso);
+		for (Investigador i1: copia.vertexSet()) {
+			for (Investigador i2: copia.vertexSet()) {
+				if (!i1.equals(i2) && copia.getEdge(i1, i2) == null && i1.getuniversidad().equals(i2.getuniversidad())) {
+					Trabajos art = Trabajos.ofVertex(i2, i1);
+					copia.addEdge(i1, i2, art);
+				}
+			}
+		}
+		var alg = new GreedyColoring<>(copia);
+		var coloring = alg.getColoring();
+		return coloring.getColorClasses().stream().filter(x -> x.size()>1).toList();
+		
 	}
+	
 	
 }

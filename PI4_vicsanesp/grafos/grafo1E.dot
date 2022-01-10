@@ -1,0 +1,23 @@
+strict graph G {
+  1 [ color="" label="Investigador 1 de oviedo" ];
+  2 [ color="red" label="Investigador 2 de oviedo" ];
+  3 [ color="" label="Investigador 3 de salamanca" ];
+  4 [ color="red" label="Investigador 4 de salamanca" ];
+  5 [ color="" label="Investigador 5 de granada" ];
+  6 [ color="yellow" label="Investigador 6 de oviedo" ];
+  7 [ color="" label="Investigador 7 de salamanca" ];
+  8 [ color="red" label="Investigador 8 de granada" ];
+  9 [ color="red" label="Investigador 9 de oviedo" ];
+  1 -- 6 [ style="solid" label="3.0" ];
+  1 -- 2 [ style="solid" label="5.0" ];
+  1 -- 4 [ style="solid" label="7.0" ];
+  4 -- 7 [ style="solid" label="6.0" ];
+  4 -- 5 [ style="solid" label="3.0" ];
+  4 -- 6 [ style="solid" label="5.0" ];
+  5 -- 8 [ style="solid" label="4.0" ];
+  6 -- 9 [ style="solid" label="3.0" ];
+  6 -- 7 [ style="solid" label="6.0" ];
+  7 -- 8 [ style="solid" label="6.0" ];
+  7 -- 9 [ style="solid" label="2.0" ];
+  2 -- 3 [ style="solid" label="1.0" ];
+}

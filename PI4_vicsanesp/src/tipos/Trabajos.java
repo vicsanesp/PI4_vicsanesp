@@ -84,6 +84,16 @@ public class Trabajos {
 	public Investigador getTarget(){
 		return target;
 	}
+	
+	public Investigador getTarget2(Investigador i) {
+		
+		Investigador res = null;
+		if (this.getSource().getID()==i.getID()) res = this.getTarget();
+		else res = this.getSource();
+		
+		return res;
+		
+	}
 
 
 	@Override
